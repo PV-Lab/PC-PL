@@ -8,15 +8,16 @@
 
 clear all; close all;
 
-%Laser flux as measured with silicon reference diode on Dec 18-2014 and Dec
-%19-2014 (average) @ 60%
+%Laser flux as measured with silicon reference diode at the desired LP
 %LP
-Flux_808 = 1.002033e17; %cm^-2/s
+Flux_808 = 4.608460e16; %cm^-2/s, 40% LP
+% Flux_808 = 6.84514e16; %cm^-2/s, 50% LP
+% Flux_808 = 9.077156e16; %cm^-2/s, 60% LP
 
 %sample thickness
-sample.d = 0.0180; %cm, thin
+sample.d = 0.0180; %cm
 sample.R = 0.3; %sample reflectivity
-sample.N_A = 3.1e15; %cm^-3, resistivity = 4.5, ptype doping, thin
+sample.N_A = 3.8e15; %cm^-3, resistivity = 1.3, ntype doping
 
 if true
     [p] = calibration_thick;
@@ -32,4 +33,4 @@ sample.c = pnow(3);
 
 G = Flux_808*(1-sample.R)/sample.d; %generation rate, assuming uniform generation throughout
 
-save('thick_calibration_60LP_121814.mat','sample','G','Flux_808');
+save('124-6_calibration.mat','sample','G','Flux_808');
