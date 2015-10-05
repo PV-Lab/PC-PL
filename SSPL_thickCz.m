@@ -6,7 +6,7 @@
 %1-5-15 - revised to use "Sinton circle_1.txt" instead of
 %"Sinton_circle_1.txt."
 
-clear all; close all;
+clear all; %close all;
 
 %Laser flux as measured with silicon reference diode at the desired LP
 %LP
@@ -17,7 +17,7 @@ Flux_808 = 4.608460e16; %cm^-2/s, 40% LP
 %sample thickness
 sample.d = 0.0180; %cm
 sample.R = 0.3; %sample reflectivity
-sample.N_A = 3.8e15; %cm^-3, resistivity = 1.3, ntype doping
+sample.N_A = 2.8e15; %cm^-3, resistivity = 1.7, ntype doping
 
 if true
     [p] = calibration_thick;
@@ -33,4 +33,4 @@ sample.c = pnow(3);
 
 G = Flux_808*(1-sample.R)/sample.d; %generation rate, assuming uniform generation throughout
 
-save('124-6_calibration.mat','sample','G','Flux_808');
+save('19-3_5s_calibration.mat','sample','G','Flux_808');
