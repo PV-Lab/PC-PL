@@ -11,7 +11,7 @@ clear all; close all;
 %sample thickness
 sample.d = 0.0180; %cm
 sample.R = 0.3; %sample reflectivity
-sample.N_A = 2.8e15; %cm^-3, resistivity = 1.7, ntype doping
+sample.N_A = 3.8e15; %cm^-3, resistivity = 1.7, ntype doping
 
 if true
     [p] = calibration_thick;
@@ -25,4 +25,4 @@ sample.a = pnow(1);
 sample.b = pnow(2);
 sample.c = pnow(3);
 
-save('20-6_5s_calibration.mat','sample');
+save('124-6_10s_redo_calibration.mat','sample');

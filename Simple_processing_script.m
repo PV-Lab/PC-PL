@@ -4,7 +4,7 @@ clear all; close all;
 filenameSintonCircle = 'C:\Users\Mallory\Documents\Non-contact crucible\9-15-2015 experiment TR+Amanda\Lifetime stage 1\PC-PL\Sinton_circle_1.txt';
 
 %Get PL data
-load('C:\Users\Mallory\Documents\Non-contact crucible\9-15-2015 experiment TR+Amanda\Lifetime stage 1\PC-PL\124-6\124-6_PCPL.mat');
+load('C:\Users\Mallory\Documents\Non-contact crucible\9-15-2015 experiment TR+Amanda\Lifetime stage 1\PC-PL\124-6\124-6_PCPL_Excel.mat');
 deltanLifetime = deltan; 
 tauLifetime = tau; 
 
