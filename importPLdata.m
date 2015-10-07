@@ -136,7 +136,7 @@ for i = 1:n;
 % %     colorbar;
 % %     colormap(gray);
     
-    PL_averages(j,i) = nanmean(nanmean(PLmaps{j,i}));
+    PL_averages(j,i) = nanmean(nanmean(PLmap_now));
     end
 end
 
