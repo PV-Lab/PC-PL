@@ -27,7 +27,7 @@ XLSsamples = cell(length(LP),1);
 
 for i = 1:1
     for cc=1:length(LP)
-        textFilename = [sample_no '_' num2str(exposure) 's_' num2str(LP(cc)) filename_after];
+        textFilename = [sample_no '_' num2str(LP(cc)) filename_after];
         XLSsamples{cc,i}=textFilename;
     end
 end
