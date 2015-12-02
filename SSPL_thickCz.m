@@ -9,9 +9,9 @@
 clear all; close all;
 
 %sample thickness
-sample.d = 0.0280; %cm
+sample.d = 0.0170; %cm
 sample.R = 0.3; %sample reflectivity
-sample.N_A = 1.7e15; %cm^-3, ntype doping
+sample.N_A = 5.3e15; %cm^-3, ntype doping
 
 if true
     [p] = calibration_thick;
@@ -25,4 +25,4 @@ sample.a = pnow(1);
 sample.b = pnow(2);
 sample.c = pnow(3);
 
-save('15-11-19-N_calibration.mat','sample');
+save('21-102-5_calibration.mat','sample');
