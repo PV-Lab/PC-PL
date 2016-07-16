@@ -10,10 +10,12 @@ clear all; close all;
 
 %Check these parameters before you run the code - they describe the
 %filename
-sample_no_PL = '\\becquerel\pvlab\DataExchange\DBN\201600405 ASU PLI\A-113-CC-4'; %this is the first part of the filenames
+sample_no_PL = 'C:\Users\Mallory\Documents\PERC mc-Si degradation\PERC LeTID May 25 2016\'; %this is the first part of the filenames
+sample_no_start = {'64-8','68-8','69-8','70-8'};
 exposure = 30; %seconds, this is the second part of the filename
-LP = [22 25 30 35 40 45 50 55 60 65 70 75 80]; %This is part of the file name, laser powers that PL images are taken at. If you change this also change it in section 3
-filename_after_PL='s bkgd_1.txt';
+% LP = [22 25 30 35 40 45 50 55 60 65 70 75 80]; %This is part of the file name, laser powers that PL images are taken at. If you change this also change it in section 3
+LP = [30];
+filename_after_PL='LP_1.txt';
 
 %Now loop throuugh the different laser powers and load the PL images. Store
 %in PLmaps - this is a cell array composed of matrices. The indices
@@ -23,10 +25,12 @@ headerlinesIn = 0;
 sample_no = cell(size(LP)); 
 PLmaps = cell(size(LP)); 
 for i = 1:length(LP)
-    sample_no{i} = [sample_no_PL ' ' num2str(LP(i)) 'p ' num2str(exposure) filename_after_PL];
-    PLmap = importdata(sample_no{i},delimiterIn,headerlinesIn);
-    PLmap = PLmap(:,2:end)./exposure; %counts/second
-    PLmaps{i} = PLmap; 
+    for j = 1:length(sample_no_start)
+        sample_no{i,j} = [sample_no_PL sample_no_start{j} '_' num2str(exposure) 's_' num2str(LP(i)) filename_after_PL];
+        PLmap = importdata(sample_no{i,j},delimiterIn,headerlinesIn);
+        PLmap = PLmap(:,2:end)./exposure; %counts/second
+        PLmaps{i,j} = PLmap; 
+    end
 end
 
 %% Collect the data which is used to obtain the calibration curve
