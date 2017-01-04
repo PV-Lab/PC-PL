@@ -129,4 +129,82 @@ for i = 1:length(samples)
     close all; 
 end
 save([dirname '\Linescans.mat'],'linescan_store','samples'); 
+
+%% Plot line scans from approximately the same injection level
+%From the previous section we should have been able to identify which maps
+%result in similar injection levels, and now we can directly compare line
+%scans at those similar injection levels (as opposed to a similar
+%generation rate). 
+clear all; close all; 
+%where is everything located
+dirname = 'C:\Users\Malloryj\Documents\LeTID\XRF\PCPL'; 
+
+%Which samples do I want to compare?
+samples_to_analyze = {'SA-1','SAL-1','SAH-1','PS-1'}; 
+%Which laser powers correspond to which sample?
+LP = [70,50,60,40]; 
+%Unfortunately I didn't save the laser powers originally so let's just tell
+%it which index to go to if we have the right sample
+LP_index = [4,3,3,1];
+
+tau_raw = figure('units','normalized','outerposition',[0 0 1 1]);
+deltan_raw = figure('units','normalized','outerposition',[0 0 1 1]);
+tau_norm = figure('units','normalized','outerposition',[0 0 1 1]);
+deltan_norm = figure('units','normalized','outerposition',[0 0 1 1]);
+
+%Load the linescan data
+load([dirname '\Linescans.mat']);
+for i = 1:length(samples_to_analyze)
+    %find the index in our old storage method
+    index = find(strcmp(samples_to_analyze{i},samples)==1); 
+    linescan_now = linescan_store{index}; 
+    linescan_now = linescan_now{LP_index(i)}; 
+    %The first column is the injection level
+    figure(deltan_raw); 
+    hold all; 
+    plot(linescan_now(:,1),'LineWidth',3); 
+    deltan_norm_linescan = (linescan_now(:,1)-min(linescan_now(:,1)))./(max(linescan_now(:,1))-min(linescan_now(:,1))); 
+    figure(deltan_norm); 
+    hold all;
+    plot(deltan_norm_linescan,'LineWidth',3); 
+    %The second column is the lifetime
+    figure(tau_raw); 
+    hold all;
+    plot(linescan_now(:,2),'LineWidth',3); 
+    tau_norm_linescan = (linescan_now(:,2)-min(linescan_now(:,2)))./(max(linescan_now(:,2))-min(linescan_now(:,2))); 
+    figure(tau_norm); 
+    hold all;
+    plot(tau_norm_linescan,'LineWidth',3);
+end
+figure(tau_raw); 
+xlabel('pixel'); 
+ylabel('lifetime [\mus]'); 
+legend(samples_to_analyze');
+figure(tau_norm); 
+xlabel('pixel'); 
+ylabel('norm. lifetime [-]'); 
+legend(samples_to_analyze');
+figure(deltan_raw); 
+xlabel('pixel'); 
+ylabel('\Deltan [cm^-^3]'); 
+legend(samples_to_analyze');
+figure(deltan_norm); 
+xlabel('pixel'); 
+ylabel('norm. \Deltan [-]'); 
+legend(samples_to_analyze');
+tightfig(tau_raw); 
+tightfig(tau_norm); 
+tightfig(deltan_raw);
+tightfig(deltan_norm); 
+%Save the figures
+hgsave(tau_raw,[dirname '\Lifetime linescans']);
+print(tau_raw,'-dpng','-r0',[dirname '\Lifetime linescans.png']); 
+hgsave(tau_norm,[dirname '\Norm lifetime linescans']);
+print(tau_norm,'-dpng','-r0',[dirname '\Norm lifetime linescans.png']);
+hgsave(deltan_raw,[dirname '\Deltan linescans']);
+print(deltan_raw,'-dpng','-r0',[dirname '\Deltan linescans.png']); 
+hgsave(deltan_norm,[dirname '\Norm deltan linescans']);
+print(deltan_norm,'-dpng','-r0',[dirname '\Norm deltan linescans.png']); 
+
+
     
