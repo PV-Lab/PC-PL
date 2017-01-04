@@ -25,12 +25,12 @@ SOFTWARE.
 function [p] = calibration_thick
 
 %PL filenames (Ex. 187_10s_20LP_1.txt)
-sample_no_PL = 'C:\Users\Mallory\Documents\Non-contact crucible\9-15-2015 experiment TR+Amanda\Lifetime stage 1\PC-PL\15-9-21-N\15-9-21-N'; %this is the first part of the filenames
-sample_no_xls = 'C:\Users\Mallory\Documents\Non-contact crucible\9-15-2015 experiment TR+Amanda\Lifetime stage 1\PC-PL\15-9-21-N\15-9-21-N';
-exposure = 5; %seconds, this is the second part of the filename
+sample_no_PL = 'C:\Users\Malloryj\Documents\LeTID\XRF\PCPL\PL\PSL-a_PCPL'; %this is the first part of the filenames
+sample_no_xls = 'C:\Users\Malloryj\Documents\LeTID\XRF\PCPL\PC\January 3 2017\PSL-a_PCPL';
+exposure = 10; %seconds, this is the second part of the filename
 LP = [22 25 30 35 40 45 50 55 60 65 70 75 80]; %This is the last part of the filename
 filename_after_PL='LP_1.txt';
-sensor = 'C:\Users\Mallory\Documents\Non-contact crucible\9-15-2015 experiment TR+Amanda\Lifetime stage 1\PC-PL\PCPL_10-2-2015\Sinton_circle_1.txt'; %This is the PL file with the Sinton circle image
+sensor = 'C:\Users\Malloryj\Documents\LeTID\XRF\PCPL\PL\Sinton_circle_1.txt'; %This is the PL file with the Sinton circle image
 filename_after_PC='LP.xlsm';
 
 %Get matrices with averages of PL/PC signals. These matrices should have
@@ -52,8 +52,8 @@ end
 p = cell(1,n); 
 
 for i = 1:n
-    pnow = polyfitZero(deltaN(:,i),PL_averages(:,i),2);
-    %pnow = polyfit(deltaN(:,i),PL_averages(:,i),2);
+%     pnow = polyfitZero(deltaN(:,i),PL_averages(:,i),2);
+    pnow = polyfit(deltaN(:,i),PL_averages(:,i),2);
     a = pnow(1);
     b = pnow(2);
     c = pnow(3);
