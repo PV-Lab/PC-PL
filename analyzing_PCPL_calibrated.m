@@ -137,12 +137,12 @@ save([dirname '\Linescans.mat'],'linescan_store','samples');
 %generation rate). 
 clear all; close all; 
 %where is everything located
-dirname = 'C:\Users\Malloryj\Documents\LeTID\XRF\PCPL'; 
+dirname = 'C:\Users\Mallory Jensen\Documents\LeTID\XRF\PCPL'; 
 
 %Which samples do I want to compare?
 samples_to_analyze = {'SA-1','SAL-1','SAH-1','PS-1'}; 
 %Which laser powers correspond to which sample?
-LP = [70,50,60,40]; 
+LP_to_analyze = [70,50,60,40]; 
 %Unfortunately I didn't save the laser powers originally so let's just tell
 %it which index to go to if we have the right sample
 LP_index = [4,3,3,1];
@@ -151,6 +151,7 @@ tau_raw = figure('units','normalized','outerposition',[0 0 1 1]);
 deltan_raw = figure('units','normalized','outerposition',[0 0 1 1]);
 tau_norm = figure('units','normalized','outerposition',[0 0 1 1]);
 deltan_norm = figure('units','normalized','outerposition',[0 0 1 1]);
+save_data = cell(size(LP_index)); 
 
 %Load the linescan data
 load([dirname '\Linescans.mat']);
@@ -159,22 +160,41 @@ for i = 1:length(samples_to_analyze)
     index = find(strcmp(samples_to_analyze{i},samples)==1); 
     linescan_now = linescan_store{index}; 
     linescan_now = linescan_now{LP_index(i)}; 
+    %Center the scan based on the presumed location of the GB
+    figure;
+    plot(linescan_now(:,2)); 
+    disp('Click what you think is the center of the linescan')
+    [x,y] = ginput(1); 
+    x_center = round(x); 
+    x_before = linspace(1,length(linescan_now(:,1)),length(linescan_now(:,1))); 
+    x_new = x_before-x_center; 
     %The first column is the injection level
     figure(deltan_raw); 
     hold all; 
-    plot(linescan_now(:,1),'LineWidth',3); 
+    plot(x_new,linescan_now(:,1),'LineWidth',3); 
     deltan_norm_linescan = (linescan_now(:,1)-min(linescan_now(:,1)))./(max(linescan_now(:,1))-min(linescan_now(:,1))); 
     figure(deltan_norm); 
     hold all;
-    plot(deltan_norm_linescan,'LineWidth',3); 
+    plot(x_new,deltan_norm_linescan,'LineWidth',3); 
     %The second column is the lifetime
     figure(tau_raw); 
     hold all;
-    plot(linescan_now(:,2),'LineWidth',3); 
+    plot(x_new,linescan_now(:,2),'LineWidth',3); 
     tau_norm_linescan = (linescan_now(:,2)-min(linescan_now(:,2)))./(max(linescan_now(:,2))-min(linescan_now(:,2))); 
     figure(tau_norm); 
     hold all;
-    plot(tau_norm_linescan,'LineWidth',3);
+    plot(x_new,tau_norm_linescan,'LineWidth',3);
+    %Read the calibrated PL data
+    calib_tau = figure('units','normalized','outerposition',[0 0 1 1]);
+    load([dirname '\' samples_to_analyze{i} '_calbrated.mat']);
+    imagesc(flipud(tau{LP_index(i)}),[2 7]);
+    axis('image');
+    colorbar;
+    colormap(gray);
+    axis off; 
+    hgsave(calib_tau,[dirname '\' samples_to_analyze{i} '_' num2str(LP_to_analyze(i)) 'LP_calibratedtau']);
+    print(calib_tau,'-dpng','-r0',[dirname '\' samples_to_analyze{i} '_' num2str(LP_to_analyze(i)) 'LP_calibratedtau.png']);
+    save_data{i} = [x_new',linescan_now(:,2)]; 
 end
 figure(tau_raw); 
 xlabel('pixel'); 
