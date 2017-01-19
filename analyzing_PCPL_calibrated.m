@@ -32,19 +32,21 @@ SOFTWARE.
 
 clear all; close all; 
 %Where everthing is located
-dirname = 'C:\Users\Malloryj\Documents\LeTID\XRF\PCPL'; 
+dirname = 'C:\Users\Mallory Jensen\Documents\LeTID\XRF\PCPL'; 
 
 %What are the sample names? These should be consistent across all file
 %types. 
-samples = {'SAL-a','SAH-a','SA-a','PSL-a','PSH-a','PS-a','PS-1',...
-    'SAL-1','SAH-1','SAH-1_repeat','SA-1','PSL-1','PSH-1'};
+% samples = {'SAL-a','SAH-a','SA-a','PSL-a','PSH-a','PS-a','PS-1',...
+%     'SAL-1','SAH-1','SAH-1_repeat','SA-1','PSL-1','PSH-1'};
 % samples = {'SAL-a'};
+samples = {'PS-1','SAL-1','SAH-1','SAH-1_repeat','SA-1'};
 
 %The axis ranges for different maps
 % axis_tau = [0 50]; 
 % axis_deltan = [1e12 1e15]; 
 
 linescan_store = cell(length(samples)); 
+linescan_length = cell(length(samples));
 
 for i = 1:length(samples)
     %Read the optical image
@@ -56,7 +58,7 @@ for i = 1:length(samples)
     load([dirname '\' samples{i} '_calib.mat']); 
     %Determine the line scan information for this sample
     %We reference to the optical image
-    figure;
+    im=figure;
     imagesc(optical_image); 
     axis('image');
     colormap(gray);
@@ -71,8 +73,21 @@ for i = 1:length(samples)
     midpoint = [mean([x(1),x(2)]),mean([y(1),y(2)])];
     new_endpoint_1 = [midpoint(1)-cos(new_angle)*(len/2),midpoint(2)-sin(new_angle)*(len/2)];
     new_endpoint_2 = [midpoint(1)+cos(new_angle)*(len/2),midpoint(2)+sin(new_angle)*(len/2)]; 
+    %Calculate the length of this line in pixels
+    len_x = abs(new_endpoint_1(1)-new_endpoint_2(1));
+    len_y = abs(new_endpoint_1(2)-new_endpoint_2(2)); 
+    ls_len = sqrt((len_x^2)+(len_y^2)); %pixels
+    %Now we also need the conversion
+    figure(im); 
+    disp('Click bottom corners to determine conversion from pixels');
+    [x,y] = ginput(2); 
+    len = sqrt(abs(x(1)-x(2))^2 + abs(y(1)-y(2))^2); %pixels
+    %Now we hard code that this is 1 cm
+    conv = (1e4)/len; %microns/pixel
+    ls_len = ls_len*conv; %now this length should be in microns
     %Loop over the laser powers and do the same thing for each laser power
     linescans_thissample = cell(length(LP)); 
+    linescan_length_thissample = cell(length(samples));
     for j = 1:length(LP)
         figNow = figure('units','normalized','outerposition',[0 0 1 1]);
         %The first image is the optical image
@@ -120,15 +135,19 @@ for i = 1:length(samples)
         ylabel('\Deltan [cm^-^3]'); 
         tightfig(figNow); 
         linescans_thissample{j} = [linescan_deltan,linescan_tau]; 
+        %Let's save a vector of the "length"
+        %Let's make an appropriate vector
+        linescan_length_thissample{j} = linspace(0,ls_len,length(linescan_tau)); 
         %Now we save the figure
         hgsave(figNow,[dirname '\' samples{i} '_' num2str(LP(j)) 'LP']);
         print(figNow,'-dpng','-r0',[dirname '\' samples{i} '_' num2str(LP(j)) 'LP.png']); 
     end
     linescan_store{i} = linescans_thissample; 
+    linescan_length{i} = linescan_length_thissample;
     %Close figures so we don't get a graphics error
     close all; 
 end
-save([dirname '\Linescans.mat'],'linescan_store','samples'); 
+save([dirname '\Linescans_only1cm.mat'],'linescan_store','samples','linescan_length'); 
 
 %% Plot line scans from approximately the same injection level
 %From the previous section we should have been able to identify which maps
@@ -154,20 +173,24 @@ deltan_norm = figure('units','normalized','outerposition',[0 0 1 1]);
 save_data = cell(size(LP_index)); 
 
 %Load the linescan data
-load([dirname '\Linescans.mat']);
+load([dirname '\Linescans_only1cm.mat']);
 for i = 1:length(samples_to_analyze)
     %find the index in our old storage method
     index = find(strcmp(samples_to_analyze{i},samples)==1); 
     linescan_now = linescan_store{index}; 
     linescan_now = linescan_now{LP_index(i)}; 
+    ls_length_now = linescan_length{index}; 
+    ls_length_now = ls_length_now{LP_index(i)}'; 
     %Center the scan based on the presumed location of the GB
     figure;
-    plot(linescan_now(:,2)); 
+    plot(ls_length_now,linescan_now(:,2)); 
     disp('Click what you think is the center of the linescan')
     [x,y] = ginput(1); 
-    x_center = round(x); 
-    x_before = linspace(1,length(linescan_now(:,1)),length(linescan_now(:,1))); 
-    x_new = x_before-x_center; 
+%     x_center = ls_length_now(find(abs(ls_length_now-x)==min(abs(ls_length_now-x)))); 
+    x_new = ls_length_now-x; 
+%     x_center = round(x); 
+%     x_before = linspace(1,length(linescan_now(:,1)),length(linescan_now(:,1))); 
+%     x_new = x_before-x_center; 
     %The first column is the injection level
     figure(deltan_raw); 
     hold all; 
@@ -187,14 +210,14 @@ for i = 1:length(samples_to_analyze)
     %Read the calibrated PL data
     calib_tau = figure('units','normalized','outerposition',[0 0 1 1]);
     load([dirname '\' samples_to_analyze{i} '_calbrated.mat']);
-    imagesc(flipud(tau{LP_index(i)}),[2 7]);
+    imagesc(flipud(tau{LP_index(i)}));%[2 7]);
     axis('image');
     colorbar;
     colormap(gray);
     axis off; 
     hgsave(calib_tau,[dirname '\' samples_to_analyze{i} '_' num2str(LP_to_analyze(i)) 'LP_calibratedtau']);
     print(calib_tau,'-dpng','-r0',[dirname '\' samples_to_analyze{i} '_' num2str(LP_to_analyze(i)) 'LP_calibratedtau.png']);
-    save_data{i} = [x_new',linescan_now(:,2)]; 
+    save_data{i} = [x_new,linescan_now(:,2)]; 
 end
 figure(tau_raw); 
 xlabel('pixel'); 
@@ -217,14 +240,14 @@ tightfig(tau_norm);
 tightfig(deltan_raw);
 tightfig(deltan_norm); 
 %Save the figures
-hgsave(tau_raw,[dirname '\Lifetime linescans']);
-print(tau_raw,'-dpng','-r0',[dirname '\Lifetime linescans.png']); 
-hgsave(tau_norm,[dirname '\Norm lifetime linescans']);
-print(tau_norm,'-dpng','-r0',[dirname '\Norm lifetime linescans.png']);
-hgsave(deltan_raw,[dirname '\Deltan linescans']);
-print(deltan_raw,'-dpng','-r0',[dirname '\Deltan linescans.png']); 
-hgsave(deltan_norm,[dirname '\Norm deltan linescans']);
-print(deltan_norm,'-dpng','-r0',[dirname '\Norm deltan linescans.png']); 
+hgsave(tau_raw,[dirname '\Lifetime linescans_wLen']);
+print(tau_raw,'-dpng','-r0',[dirname '\Lifetime linescans_wLen.png']); 
+hgsave(tau_norm,[dirname '\Norm lifetime linescans_wLen']);
+print(tau_norm,'-dpng','-r0',[dirname '\Norm lifetime linescans_wLen.png']);
+hgsave(deltan_raw,[dirname '\Deltan linescans_wLen']);
+print(deltan_raw,'-dpng','-r0',[dirname '\Deltan linescans_wLen.png']); 
+hgsave(deltan_norm,[dirname '\Norm deltan linescans_wLen']);
+print(deltan_norm,'-dpng','-r0',[dirname '\Norm deltan linescans_wLen.png']); 
 
 
     
