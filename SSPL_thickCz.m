@@ -33,9 +33,9 @@ SOFTWARE.
 clear all; close all;
 
 %sample thickness
-sample.d = 0.0173; %cm
+sample.d = 0.0167; %cm
 sample.R = 0.1; %sample reflectivity
-sample.N_A = 8.3e15; %cm^-3
+sample.N_A = 1.1e16; %cm^-3
 
 if true
     [p] = calibration_thick;
@@ -49,4 +49,4 @@ sample.a = pnow(1);
 sample.b = pnow(2);
 sample.c = pnow(3);
 
-save('C:\Users\Malloryj\Documents\LeTID\XRF\PCPL\PSL-a_calib.mat','sample');
+save('C:\Users\Mallory Jensen\Documents\LeTID\XRF\PCPL April 19 2017\PS-a_10s_calib.mat','sample');
