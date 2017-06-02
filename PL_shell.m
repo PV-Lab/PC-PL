@@ -24,10 +24,10 @@ SOFTWARE.
 
 %Make a PL image from files
 clear all; close all; 
-directory = 'C:\Users\Mallory\Documents\Australia\Passivation run';
-sample_name = {'A99-2'}; 
-exposure = [10,10]; 
-LP = [30]; 
+directory = 'C:\Users\Mallory Jensen\Documents\LeTID\XRF\PL new ROI\Mallory GB samples\all ASCII';
+sample_name = {'PSH-1_1_optical' 'PSH-1_2_optical' 'PSH-1_3_optical' 'PSH-1_1_PLl' 'PSH-1_2_PLl' 'PSH-1_3_PLI'}; 
+exposure = [10,10,10,10,10,10]; 
+LP = [80]; 
 
 for i = 1:length(sample_name)
     for k = 1:length(LP)
@@ -35,7 +35,7 @@ for i = 1:length(sample_name)
         delimiterIn = ',';
         headerlinesIn = 0;
         PLmap = importdata(filename,delimiterIn,headerlinesIn);
-        PLmap = PLmap(:,2:end)./exposure(i); %counts/second
+%         PLmap = PLmap(:,2:end)./exposure(i); %counts/second
         PLmaps_store{i,k} = PLmap; 
         minvalue = min(min(PLmap));
         maxvalue = max(max(PLmap));
