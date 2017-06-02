@@ -32,14 +32,14 @@ SOFTWARE.
 
 clear all; close all; 
 %Where everthing is located
-dirname = 'C:\Users\Mallory Jensen\Documents\LeTID\XRF\PCPL'; 
+dirname = 'C:\Users\Mallory Jensen\Documents\LeTID\XRF\PCPL April 19 2017'; 
 
 %What are the sample names? These should be consistent across all file
 %types. 
 % samples = {'SAL-a','SAH-a','SA-a','PSL-a','PSH-a','PS-a','PS-1',...
 %     'SAL-1','SAH-1','SAH-1_repeat','SA-1','PSL-1','PSH-1'};
 % samples = {'SAL-a'};
-samples = {'PS-1','SAL-1','SAH-1','SAH-1_repeat','SA-1'};
+samples = {'PS-1_10s','PS-1_5s','PSH-1_5s','PSH-1_10s','PSL-1_5s','PSL-1_10s','SAL-1_30s','SAH-1_30s','SA-1_30s'};
 
 %The axis ranges for different maps
 % axis_tau = [0 50]; 
@@ -53,9 +53,10 @@ for i = 1:length(samples)
     load([dirname '\' samples{i} '_optical.mat']); 
     optical_image = PLmap; 
     %Read the calibrated PL data
-    load([dirname '\' samples{i} '_calbrated.mat']); 
+    load([dirname '\' samples{i} '_calibrated.mat']); 
     %Read the calibration file
-    load([dirname '\' samples{i} '_calib.mat']); 
+%     load([dirname '\' samples{i} '_calib.mat']); 
+    load([dirname '\total_calibration_' samples{i} '.mat']); 
     %Determine the line scan information for this sample
     %We reference to the optical image
     im=figure;
@@ -92,7 +93,8 @@ for i = 1:length(samples)
         figNow = figure('units','normalized','outerposition',[0 0 1 1]);
         %The first image is the optical image
         subplot(3,2,1); 
-        imagesc(optical_image); 
+        range_im = max(max(optical_image))-min(min(optical_image)); 
+        imagesc(optical_image,[0.05*range_im+min(min(optical_image)) 0.8*range_im+min(min(optical_image))]); 
         axis('image');
         colormap(gray);
         axis off; 
@@ -156,15 +158,15 @@ save([dirname '\Linescans_only1cm.mat'],'linescan_store','samples','linescan_len
 %generation rate). 
 clear all; close all; 
 %where is everything located
-dirname = 'C:\Users\Mallory Jensen\Documents\LeTID\XRF\PCPL'; 
+dirname = 'C:\Users\Mallory Jensen\Documents\LeTID\XRF\PCPL April 19 2017'; 
 
 %Which samples do I want to compare?
-samples_to_analyze = {'SA-1','SAL-1','SAH-1','PS-1'}; 
+samples_to_analyze = {'PS-1_10s','PSH-1_10s','PSL-1_10s','SAL-1_30s','SAH-1_30s','SA-1_30s'}; 
 %Which laser powers correspond to which sample?
-LP_to_analyze = [70,50,60,40]; 
+LP_to_analyze = [30,25,25,30,80,80]; 
 %Unfortunately I didn't save the laser powers originally so let's just tell
 %it which index to go to if we have the right sample
-LP_index = [4,3,3,1];
+LP_index = [2,1,1,5,7,7];
 
 tau_raw = figure('units','normalized','outerposition',[0 0 1 1]);
 deltan_raw = figure('units','normalized','outerposition',[0 0 1 1]);
@@ -209,7 +211,7 @@ for i = 1:length(samples_to_analyze)
     plot(x_new,tau_norm_linescan,'LineWidth',3);
     %Read the calibrated PL data
     calib_tau = figure('units','normalized','outerposition',[0 0 1 1]);
-    load([dirname '\' samples_to_analyze{i} '_calbrated.mat']);
+    load([dirname '\' samples_to_analyze{i} '_calibrated.mat']);
     imagesc(flipud(tau{LP_index(i)}));%[2 7]);
     axis('image');
     colorbar;
