@@ -24,14 +24,16 @@ SOFTWARE.
 
 %Make a PL image from files
 clear all; close all; 
-directory = 'C:\Users\Mallory Jensen\Documents\LeTID\XRF\PL new ROI\Mallory GB samples\all ASCII';
-sample_name = {'PSH-1_1_optical' 'PSH-1_2_optical' 'PSH-1_3_optical' 'PSH-1_1_PLl' 'PSH-1_2_PLl' 'PSH-1_3_PLI'}; 
-exposure = [10,10,10,10,10,10]; 
-LP = [80]; 
+directory = 'C:\Users\Mallory Jensen\Documents\LeTID\PDG\as-received lifetimes\PLI';
+sample_name = {'SD-2-2','SD-2-4','SD-3-1','SD-3-2','SD-3-4','SD-4-1','SD-4-2',...
+    'SD-4-4','SD-5-1','SD-5-2','SD-5-4','SD-6-1','SD-6-2','SD-6-4','SD-7-1',...
+    'SD-7-4','SD-8-1','SD-8-4','SD-FZ-1'}; 
+exposure = 30.*ones(size(sample_name)); 
+LP = [60]; 
 
 for i = 1:length(sample_name)
     for k = 1:length(LP)
-        filename = [directory '\' sample_name{i} '_' num2str(exposure(i)) 's_' num2str(LP(k)) 'LP_1.txt'];
+        filename = [directory '\' sample_name{i} '_' num2str(exposure(i)) 'sec_' num2str(LP(k)) 'LP_1.txt'];
         delimiterIn = ',';
         headerlinesIn = 0;
         PLmap = importdata(filename,delimiterIn,headerlinesIn);
