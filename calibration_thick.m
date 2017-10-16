@@ -25,12 +25,12 @@ SOFTWARE.
 function [p] = calibration_thick
 
 %PL filenames (Ex. 187_10s_20LP_1.txt)
-sample_no_PL = 'C:\Users\Mallory Jensen\Documents\LeTID\XRF\PCPL April 19 2017\PL\PSa_PCPL'; %this is the first part of the filenames
-sample_no_xls = 'C:\Users\Mallory Jensen\Documents\LeTID\XRF\PCPL April 19 2017\PC\PSa_PCPL';
-exposure = 10; %seconds, this is the second part of the filename
-LP = [22 25 30 35 40 45 50 55 60]; %This is the last part of the filename
+sample_no_PL = 'C:\Users\Mallory Jensen\Documents\LeTID\Dartboard\Repassivated samples\PCPL\PCPL August 8 2017\PL\V-L-5_PCPL'; %this is the first part of the filenames
+sample_no_xls = 'C:\Users\Mallory Jensen\Documents\LeTID\Dartboard\Repassivated samples\PCPL\PCPL August 8 2017\V-L-5';
+exposure = 30; %seconds, this is the second part of the filename
+LP = [25 30 35 40 45 50 55 60 65 70 75 80]; %This is the last part of the filename
 filename_after_PL='LP_1.txt';
-sensor = 'C:\Users\Mallory Jensen\Documents\LeTID\XRF\PCPL April 19 2017\PL\Sinton_circle_1.txt'; %This is the PL file with the Sinton circle image
+sensor = 'C:\Users\Mallory Jensen\Documents\LeTID\Dartboard\Repassivated samples\PCPL\PCPL August 8 2017\PL\Sinton_coil_1.txt'; %This is the PL file with the Sinton circle image
 filename_after_PC='LP.xlsm';
 
 %Get matrices with averages of PL/PC signals. These matrices should have
