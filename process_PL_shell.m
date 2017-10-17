@@ -33,7 +33,7 @@ save_dir = 'C:\Users\Mallory Jensen\Documents\LeTID\Dartboard\Repassivated sampl
 
 %Get the sample information 
 sample_params = 'C:\Users\Mallory Jensen\Documents\LeTID\Dartboard\Repassivated samples\Sample measurements.xlsx'; 
-[params,names_params] = xlsread(sample_params,'sample summary','A2:J13');
+[params,names_params] = xlsread(sample_params,'sample summary','A2:L13');
 
 %Get the calibration information 
 dir_calib = 'C:\Users\Mallory Jensen\Documents\LeTID\Dartboard\Repassivated samples\PCPL\PCPL August 8 2017'; 
@@ -41,6 +41,9 @@ samples_calib = {'C-L-5','Mo-L-5','Ni-L-5','Ti-L-5','V-L-5'};
 exposure = [10, 10, 10, 30, 30];
 
 [num_samples,n] = size(names_params); 
+
+%We want to correct the doping
+correct_doping = 'Y'; 
 
 %Now we loop
 for i = 1:num_samples
@@ -54,13 +57,20 @@ for i = 1:num_samples
     LP = str2num(names_params{i,10}); 
     %Get the exposure for this sample
     exp_sample = params(i,8); 
-    Flux_808 = = str2num(names_params{i,11});
+    Flux_808 = str2num(names_params{i,11});
+    %What's the doping of this sample
+    doping_samp = params(i,11);
     try
         %Now run the script to read and calibrate the data
-        [PLmaps,deltan,tau,deltatau]=process_PL(names_params{i},calibration,LP,Flux_808,exp_sample);
+        [PLmaps,deltan,tau,deltatau]=process_PL({[dir_PL '\' names_params{i}]},...
+            calibration,LP,Flux_808,exp_sample,correct_doping,doping_samp);
+        %Get the matching optical image
+        optical_filename = [dir_PL '\' names_params{i} '_optical_1.txt']; 
+        optical_map = importdata(optical_filename,',',0);
         %Save the data
         savename = [save_dir '\' names_params{i} '_calibrated.mat']; 
-        save(savename,'PLmaps','deltan','tau','LP','exp_sample','Flux_808','calibration'); 
+        save(savename,'PLmaps','deltan','tau','LP','exp_sample',...
+            'Flux_808','calibration','doping_samp','optical_map'); 
     catch
         disp(['Error calibrating sample ' names_params{i}]);
     end
