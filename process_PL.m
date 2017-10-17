@@ -23,10 +23,11 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 %}
 
-function [PLmaps,deltan,tau,deltatau]=process_PL(sample_no,calibration,LP,Flux_808_input,exposure)
+function [PLmaps,deltan,tau,deltatau]=process_PL(sample_no,calibration,LP,...
+    Flux_808_input,exposure,correct_doping,doping_samp)
 % Read the data
 
-%Populate the filename array 
+%Populate the filename array
 samples = cell(length(LP),length(sample_no));
 delimiterIn = ',';
 headerlinesIn = 0;
@@ -39,7 +40,7 @@ for i = 1:length(sample_no)
 end
 
 PLmaps = cell(length(LP),length(sample_no)); 
-for i = 1:length(sample_no);
+for i = 1:length(sample_no)
     for j = 1:length(LP)
         filename = samples{j,i};
         PLmap = importdata(filename,delimiterIn,headerlinesIn);
@@ -61,6 +62,12 @@ end
 
 %Process the data into lifetime
 load(calibration);
+%Correct the b value for calibration if specified
+if strcmp(correct_doping,'Y')==1
+    %I prop Brad*deltan^2 + Brad*doping*deltan + some offset
+    %Correct sample.b according
+    sample.b = (doping_samp/sample.N_A)*sample.b;
+end
 
 G = Flux_808_input.*(1-sample.R)./sample.d; %generation rate, assuming uniform generation throughout
 
