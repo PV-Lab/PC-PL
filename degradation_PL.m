@@ -31,8 +31,9 @@ clear all; close all; clc;
 %Locations of the different PL maps corresponding to different times
 initial_PL = 'C:\Users\Mallory Jensen\Documents\LeTID\Dartboard\Repassivated samples\PCPL\PCPL August 8 2017'; 
 deg_PL_1 = 'C:\Users\Mallory Jensen\Documents\LeTID\Dartboard\Repassivated samples\PCPL\8000s PL'; 
-times = {'0s' '8000s'}; 
-dirnames = {initial_PL,deg_PL_1};
+deg_PL_2 = 'C:\Users\Mallory Jensen\Documents\LeTID\Dartboard\Repassivated samples\PCPL\100000s degradation';
+times = {'0s' '8000s' '100361s'}; 
+dirnames = {initial_PL,deg_PL_1 deg_PL_2};
 
 %Samples analyzed
 samples = {'Mo-L-5','Ti-L-5','Ni-L-5','V-L-5','C-L-5',...
@@ -88,8 +89,9 @@ clear all; close all; clc;
 %Locations of the different PL maps corresponding to different times
 initial_PL = 'C:\Users\Mallory Jensen\Documents\LeTID\Dartboard\Repassivated samples\PCPL\PCPL August 8 2017'; 
 deg_PL_1 = 'C:\Users\Mallory Jensen\Documents\LeTID\Dartboard\Repassivated samples\PCPL\8000s PL'; 
-times = {'0s' '8000s'}; 
-dirnames = {initial_PL,deg_PL_1};
+deg_PL_2 = 'C:\Users\Mallory Jensen\Documents\LeTID\Dartboard\Repassivated samples\PCPL\100000s degradation';
+times = {'0s' '8000s' '100361s'}; 
+dirnames = {initial_PL,deg_PL_1 deg_PL_2};
 savedirname = 'C:\Users\Mallory Jensen\Documents\LeTID\Dartboard\Repassivated samples\PCPL';
 
 %Samples analyzed
@@ -98,8 +100,8 @@ samples = {'Mo-L-5','Ti-L-5','Ni-L-5','V-L-5','C-L-5',...
 % samples = {'Mo-L-5'};
 
 %Laser power indices to match
-lps = {[1 3],[2 2],[1 3],[1 2],[1 2],...
-    [1 4],[2 2],[1 4],[1 5],[1 3]};
+lps = {[1 3 6],[2 2 3],[1 3 6],[1 2 3],[1 2 2],...
+    [1 4 6],[2 2 4],[1 4 6],[1 5 4],[1 3 4]};
 % lps = {[1 3]}; 
 
 %Loop over and do the same thing for each sample
