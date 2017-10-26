@@ -122,6 +122,18 @@ for i = 1:length(samples)
         tau_now = tau{lps_now(j)}; 
         tau_maps{j} = tau_now; 
         optical_maps{j} = optical_map; 
+        h=figure; 
+        %Then plot the first image
+        imagesc(tau_now);
+        axis('image');
+        axis off; 
+        colormap('gray');
+        colorbar; 
+        title([times{j} ', LP = ' num2str(LP(lps_now(j)))]); 
+        %Save the figure
+        set(h,'defaultAxesFontSize', 20)
+        hgsave(h,[savedirname '\' samples{i} '_' times{j} '_' num2str(LP(lps_now(j))) 'LP']);
+        print(h,'-dpng','-r0',[savedirname '\' samples{i} '_' times{j} '_' num2str(LP(lps_now(j))) 'LP.png']);
         if j == 1
             figure(deg_plots); 
             %Then plot the first image
