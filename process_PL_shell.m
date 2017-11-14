@@ -28,14 +28,15 @@ clear all; close all; clc;
 %Where are the PL files to calibrate
 % dir_PL = 'C:\Users\Mallory Jensen\Documents\LeTID\Dartboard\Repassivated samples\PCPL\PCPL August 8 2017\PL'; %round 1
 % dir_PL = 'C:\Users\Mallory Jensen\Documents\LeTID\Dartboard\Repassivated samples\PCPL\8000s PL'; %round 2
-dir_PL = 'C:\Users\Mallory Jensen\Documents\LeTID\Dartboard\Repassivated samples\PCPL\100000s degradation'; %round 3
+% dir_PL = 'C:\Users\Mallory Jensen\Documents\LeTID\Dartboard\Repassivated samples\PCPL\100000s degradation'; %round 3
+dir_PL = 'C:\Users\Mallory Jensen\Documents\LeTID\Dartboard\Repassivated samples\PCPL\200000s degradation'; %round 4
 
 %Where should we save the data
-save_dir = 'C:\Users\Mallory Jensen\Documents\LeTID\Dartboard\Repassivated samples\PCPL\100000s degradation'; 
+save_dir = 'C:\Users\Mallory Jensen\Documents\LeTID\Dartboard\Repassivated samples\PCPL\200000s degradation'; 
 
 %Get the sample information 
 sample_params = 'C:\Users\Mallory Jensen\Documents\LeTID\Dartboard\Repassivated samples\Sample measurements.xlsx'; 
-[params,names_params] = xlsread(sample_params,'sample summary','A2:R13');
+[params,names_params] = xlsread(sample_params,'sample summary','A2:U13');
 
 %Get the calibration information 
 dir_calib = 'C:\Users\Mallory Jensen\Documents\LeTID\Dartboard\Repassivated samples\PCPL\PCPL August 8 2017'; 
@@ -58,14 +59,17 @@ for i = 1:num_samples
     %Get the laser powers for this sample
 %     LP = str2num(names_params{i,10}); %round 1
 %     LP = str2num(names_params{i,14}); %round 2
-    LP = str2num(names_params{i,17}); %round 3
+%     LP = str2num(names_params{i,17}); %round 3
+    LP = str2num(names_params{i,20}); %round 4
     %Get the exposure for this sample
 %     exp_sample = params(i,8); %round 1
 %     Flux_808 = str2num(names_params{i,11}); %round 1
 %     exp_sample = params(i,12); %round 2
 %     Flux_808 = str2num(names_params{i,15}); %round 2
-    exp_sample = params(i,15); %round 3
-    Flux_808 = str2num(names_params{i,18}); %round 3
+%     exp_sample = params(i,15); %round 3
+%     Flux_808 = str2num(names_params{i,18}); %round 3
+    exp_sample = params(i,18); %round 4
+    Flux_808 = str2num(names_params{i,21}); %round 4
     %What's the doping of this sample
     doping_samp = params(i,11);
     try
