@@ -32,8 +32,9 @@ clear all; close all; clc;
 initial_PL = 'C:\Users\Mallory Jensen\Documents\LeTID\Dartboard\Repassivated samples\PCPL\PCPL August 8 2017'; 
 deg_PL_1 = 'C:\Users\Mallory Jensen\Documents\LeTID\Dartboard\Repassivated samples\PCPL\8000s PL'; 
 deg_PL_2 = 'C:\Users\Mallory Jensen\Documents\LeTID\Dartboard\Repassivated samples\PCPL\100000s degradation';
-times = {'0s' '8000s' '100361s'}; 
-dirnames = {initial_PL,deg_PL_1 deg_PL_2};
+deg_PL_3 = 'C:\Users\Mallory Jensen\Documents\LeTID\Dartboard\Repassivated samples\PCPL\200000s degradation';
+times = {'0s' '8000s' '100361s','228941s'}; 
+dirnames = {initial_PL,deg_PL_1 deg_PL_2 deg_PL_3};
 
 %Samples analyzed
 samples = {'Mo-L-5','Ti-L-5','Ni-L-5','V-L-5','C-L-5',...
@@ -90,8 +91,9 @@ clear all; close all; clc;
 initial_PL = 'C:\Users\Mallory Jensen\Documents\LeTID\Dartboard\Repassivated samples\PCPL\PCPL August 8 2017'; 
 deg_PL_1 = 'C:\Users\Mallory Jensen\Documents\LeTID\Dartboard\Repassivated samples\PCPL\8000s PL'; 
 deg_PL_2 = 'C:\Users\Mallory Jensen\Documents\LeTID\Dartboard\Repassivated samples\PCPL\100000s degradation';
-times = {'0s' '8000s' '100361s'}; 
-dirnames = {initial_PL,deg_PL_1 deg_PL_2};
+deg_PL_3 = 'C:\Users\Mallory Jensen\Documents\LeTID\Dartboard\Repassivated samples\PCPL\200000s degradation';
+times = {'0s' '8000s' '100361s','228941s'};  
+dirnames = {initial_PL,deg_PL_1 deg_PL_2 deg_PL_3};
 savedirname = 'C:\Users\Mallory Jensen\Documents\LeTID\Dartboard\Repassivated samples\PCPL';
 
 %Samples analyzed
@@ -100,8 +102,8 @@ samples = {'Mo-L-5','Ti-L-5','Ni-L-5','V-L-5','C-L-5',...
 % samples = {'Mo-L-5'};
 
 %Laser power indices to match
-lps = {[1 3 6],[2 2 3],[1 3 6],[1 2 3],[1 2 2],...
-    [1 4 6],[2 2 4],[1 4 6],[1 5 4],[1 3 4]};
+lps = {[1 3 6 6],[2 2 3 4],[1 3 6 6],[1 2 3 4],[1 2 2 2],...
+    [1 4 6 6],[2 2 4 4],[1 4 6 6],[1 5 4 4],[1 3 3 3]};
 % lps = {[1 3]}; 
 
 %Loop over and do the same thing for each sample
@@ -137,7 +139,7 @@ for i = 1:length(samples)
         if j == 1
             figure(deg_plots); 
             %Then plot the first image
-            subplot(2,length(times),j); 
+            subplot(3,length(times),j); 
             imagesc(tau_now);
             axis('image');
             axis off; 
@@ -149,7 +151,7 @@ for i = 1:length(samples)
             [tau_aligned]=align_maps(tau_maps{1},tau_now);
             %Plot the new aligned map
             figure(deg_plots); 
-            subplot(2,length(times),j); 
+            subplot(3,length(times),j); 
             imagesc(tau_aligned);
             axis('image');
             axis off; 
@@ -158,14 +160,26 @@ for i = 1:length(samples)
             title([times{j} ', LP = ' num2str(LP(lps_now(j)))]);
             %Now also make a difference map relative to the initial
             diff_map = tau_aligned./tau_maps{1}; 
-            subplot(2,length(times),length(times)+j); 
+            subplot(3,length(times),length(times)+j); 
             imagesc(diff_map);
             axis('image');
             axis off; 
             caxis([0 1]);
             colormap('gray');
             colorbar; 
-            title(['ratio ' times{j}]);  
+            title(['ratio ' times{j}]);
+            %Plot the effective defect density
+            ntstar = (1./tau_aligned)-(1./tau_maps{1}); 
+            index = find(isinf(ntstar)==1); 
+            ntstar(index) = 0;
+            subplot(3,length(times),2*length(times)+j); 
+            imagesc(ntstar);
+            axis('image');
+            axis off; 
+            caxis([1e-5 5e-1]);
+            colormap('gray');
+            colorbar; 
+            title(['N_t^* [\mus^{-1}] ' times{j}]);
         end
     end
     %Save the figure
