@@ -33,9 +33,9 @@ SOFTWARE.
 clear all; close all;
 
 %sample thickness
-sample.d = 0.0212; %cm
+sample.d = 0.0175; %cm
 sample.R = 0.01; %sample reflectivity
-sample.N_A = 1.2e16; %cm^-3
+sample.N_A = 1.0e16; %cm^-3
 
 if true
     [p] = calibration_thick;
@@ -49,4 +49,4 @@ sample.a = pnow(1);
 sample.b = pnow(2);
 sample.c = pnow(3);
 
-save('C:\Users\Mallory Jensen\Documents\LeTID\Dartboard\Repassivated samples\PCPL\PCPL August 8 2017\V-L-5_30s_calib.mat','sample');
+save('C:\Users\Mallory Jensen\Documents\LeTID\PDG\round 2 data\from SERIS\PCPL calibrations\8-6_10s_calib.mat','sample');

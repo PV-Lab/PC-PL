@@ -41,8 +41,8 @@ function [deltaN] = importXLSdata(sample_no,exposure,LP,filename_after)
 
 %Define which rows you want to consider from the Sinton spreadsheet (i.e.
 %separate out the rising signal)
-sheet = 'Calc'; %may need to change this depending on which version spreadsheet you are using
-deltaN_range = 'I50:I130';
+sheet = 'RawData'; %may need to change this depending on which version spreadsheet you are using
+deltaN_range = 'D50:D120';
 
 %% Evaluate Sinton files for each laser power
 
