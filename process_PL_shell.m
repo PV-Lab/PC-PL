@@ -26,52 +26,40 @@ SOFTWARE.
 clear all; close all; clc; 
 
 %Where are the PL files to calibrate
-% dir_PL = 'C:\Users\Mallory Jensen\Documents\LeTID\Dartboard\Repassivated samples\PCPL\PCPL August 8 2017\PL'; %round 1
-% dir_PL = 'C:\Users\Mallory Jensen\Documents\LeTID\Dartboard\Repassivated samples\PCPL\8000s PL'; %round 2
-% dir_PL = 'C:\Users\Mallory Jensen\Documents\LeTID\Dartboard\Repassivated samples\PCPL\100000s degradation'; %round 3
-dir_PL = 'C:\Users\Mallory Jensen\Documents\LeTID\Dartboard\Repassivated samples\PCPL\200000s degradation'; %round 4
+dir_PL = 'C:\Users\Mallory Jensen\Documents\LeTID\PDG\round 2 data\from SERIS\PL\data\initial'; %round 1
 
 %Where should we save the data
-save_dir = 'C:\Users\Mallory Jensen\Documents\LeTID\Dartboard\Repassivated samples\PCPL\200000s degradation'; 
+save_dir = 'C:\Users\Mallory Jensen\Documents\LeTID\PDG\round 2 data\from SERIS\PL\Summary\initial'; 
 
 %Get the sample information 
-sample_params = 'C:\Users\Mallory Jensen\Documents\LeTID\Dartboard\Repassivated samples\Sample measurements.xlsx'; 
+sample_params = 'C:\Users\Mallory Jensen\Documents\LeTID\PDG\round 2 data\from SERIS\PL\Sample measurements.xlsx'; 
 [params,names_params] = xlsread(sample_params,'sample summary','A2:U13');
 
 %Get the calibration information 
-dir_calib = 'C:\Users\Mallory Jensen\Documents\LeTID\Dartboard\Repassivated samples\PCPL\PCPL August 8 2017'; 
-samples_calib = {'C-L-5','Mo-L-5','Ni-L-5','Ti-L-5','V-L-5'}; 
-exposure = [10, 10, 10, 30, 30];
+dir_calib = 'C:\Users\Mallory Jensen\Documents\LeTID\PDG\round 2 data\from SERIS\PL\calibration\PCPL calibrations'; 
+samples_calib = {'1-6','2-6','3-6','4-6','5-6','6-6','7-6','8-6'}; 
+exposure = [10, 10, 10, 10, 10, 10, 10, 10];
 
 [num_samples,n] = size(names_params); 
 
 %We want to correct the doping
-correct_doping = 'Y'; 
+correct_doping = 'N'; 
 
 %Now we loop
 for i = 1:num_samples
     %Figure out which calibration we should use
-    calibration_name = names_params{i,8}; 
+    calibration_name = names_params{i,7}; 
     %Get the exposure time
     exp_index = find(strcmp(samples_calib,calibration_name)==1); 
     %Make the calibration filename
-    calibration = [dir_calib '\' calibration_name '_' num2str(exposure(exp_index)) 's_calib.mat']; 
+    calibration = [dir_calib '\' calibration_name '_' num2str(exposure(exp_index)) 's_avgcalib.mat']; 
     %Get the laser powers for this sample
-%     LP = str2num(names_params{i,10}); %round 1
-%     LP = str2num(names_params{i,14}); %round 2
-%     LP = str2num(names_params{i,17}); %round 3
-    LP = str2num(names_params{i,20}); %round 4
+    LP = str2num(names_params{i,9}); %round 1
     %Get the exposure for this sample
-%     exp_sample = params(i,8); %round 1
-%     Flux_808 = str2num(names_params{i,11}); %round 1
-%     exp_sample = params(i,12); %round 2
-%     Flux_808 = str2num(names_params{i,15}); %round 2
-%     exp_sample = params(i,15); %round 3
-%     Flux_808 = str2num(names_params{i,18}); %round 3
-    exp_sample = params(i,18); %round 4
-    Flux_808 = str2num(names_params{i,21}); %round 4
+    exp_sample = params(i,7); %round 1
+    Flux_808 = str2num(names_params{i,10}); %round 1
     %What's the doping of this sample
-    doping_samp = params(i,11);
+    doping_samp = params(i,3);
     try
         %Now run the script to read and calibrate the data
         [PLmaps,deltan,tau,deltatau]=process_PL({[dir_PL '\' names_params{i}]},...

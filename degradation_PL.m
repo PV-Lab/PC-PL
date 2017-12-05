@@ -29,16 +29,13 @@ SOFTWARE.
 clear all; close all; clc; 
 %the PL maps should already be calibrated and saved as .mat files
 %Locations of the different PL maps corresponding to different times
-initial_PL = 'C:\Users\Mallory Jensen\Documents\LeTID\Dartboard\Repassivated samples\PCPL\PCPL August 8 2017'; 
-deg_PL_1 = 'C:\Users\Mallory Jensen\Documents\LeTID\Dartboard\Repassivated samples\PCPL\8000s PL'; 
-deg_PL_2 = 'C:\Users\Mallory Jensen\Documents\LeTID\Dartboard\Repassivated samples\PCPL\100000s degradation';
-deg_PL_3 = 'C:\Users\Mallory Jensen\Documents\LeTID\Dartboard\Repassivated samples\PCPL\200000s degradation';
-times = {'0s' '8000s' '100361s','228941s'}; 
-dirnames = {initial_PL,deg_PL_1 deg_PL_2 deg_PL_3};
+initial_PL = 'C:\Users\Mallory Jensen\Documents\LeTID\PDG\round 2 data\from SERIS\PL\Summary\initial'; 
+% deg_PL_1 = 'C:\Users\Mallory Jensen\Documents\LeTID\Dartboard\Repassivated samples\PCPL\8000s PL'; 
+times = {'0s'}; 
+dirnames = {initial_PL};
 
 %Samples analyzed
-samples = {'Mo-L-5','Ti-L-5','Ni-L-5','V-L-5','C-L-5',...
-    'Mo-h-5','Ti-h-5','Ni-h-5','V-h-5','C-h-5'}; 
+samples = {'1-6','2-6','3-6','4-6','5-6','6-6','7-6','8-6'}; 
 
 deltan_avg = cell(size(samples)); 
 %Loop over and do the same thing for each sample
@@ -88,23 +85,17 @@ end
 clear all; close all; clc; 
 %the PL maps should already be calibrated and saved as .mat files
 %Locations of the different PL maps corresponding to different times
-initial_PL = 'C:\Users\Mallory Jensen\Documents\LeTID\Dartboard\Repassivated samples\PCPL\PCPL August 8 2017'; 
-deg_PL_1 = 'C:\Users\Mallory Jensen\Documents\LeTID\Dartboard\Repassivated samples\PCPL\8000s PL'; 
-deg_PL_2 = 'C:\Users\Mallory Jensen\Documents\LeTID\Dartboard\Repassivated samples\PCPL\100000s degradation';
-deg_PL_3 = 'C:\Users\Mallory Jensen\Documents\LeTID\Dartboard\Repassivated samples\PCPL\200000s degradation';
-times = {'0s' '8000s' '100361s','228941s'};  
-dirnames = {initial_PL,deg_PL_1 deg_PL_2 deg_PL_3};
-savedirname = 'C:\Users\Mallory Jensen\Documents\LeTID\Dartboard\Repassivated samples\PCPL';
+initial_PL = 'C:\Users\Mallory Jensen\Documents\LeTID\PDG\round 2 data\from SERIS\PL\Summary\initial'; 
+% deg_PL_1 = 'C:\Users\Mallory Jensen\Documents\LeTID\Dartboard\Repassivated samples\PCPL\8000s PL'; 
+times = {'0s'}; 
+dirnames = {initial_PL};
+savedirname = 'C:\Users\Mallory Jensen\Documents\LeTID\PDG\round 2 data\from SERIS\PL\Summary\initial';
 
 %Samples analyzed
-samples = {'Mo-L-5','Ti-L-5','Ni-L-5','V-L-5','C-L-5',...
-    'Mo-h-5','Ti-h-5','Ni-h-5','V-h-5','C-h-5'}; 
-% samples = {'Mo-L-5'};
+samples = {'1-6','2-6','3-6','4-6','5-6','6-6','7-6','8-6'}; 
 
 %Laser power indices to match
-lps = {[1 3 6 6],[2 2 3 4],[1 3 6 6],[1 2 3 4],[1 2 2 2],...
-    [1 4 6 6],[2 2 4 4],[1 4 6 6],[1 5 4 4],[1 3 3 3]};
-% lps = {[1 3]}; 
+lps = {[2],[1],[2],[1],[2],[1],[1],[2]}; 
 
 %Loop over and do the same thing for each sample
 for i = 1:length(samples)
